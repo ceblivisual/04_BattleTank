@@ -1,9 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "TankPlayerController.h"
+#include "Tank.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "BattleTank.h"
 #include "Runtime/Core/Public/Math/Vector2D.h"
+
+// Forward Decleration
+class ATank;
 
 void  ATankPlayerController::Tick(float DeltaTime)
 {
