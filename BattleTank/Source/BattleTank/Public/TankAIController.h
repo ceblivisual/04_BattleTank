@@ -24,9 +24,5 @@ private:
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	ATank* GetControlledTank();
-
-	ATank* GetAIControlledTank() const;
-
-	ATank* GetPlayerTank() const;
+	float AcceptenceRadius = 3000; // Distance to target, in this case PlayerTank
 };
