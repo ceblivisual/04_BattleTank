@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Cebli Görselleþtirme & Animasyon
 
 #include "TankMovementComponent.h"
 #include "TankTrack.h"
@@ -6,6 +6,7 @@
 
 void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {	
+	if (!LeftTrack || !RightTrack) { return; }
 	LeftTrack = LeftTrackToSet;
 	RightTrack = RightTrackToSet;
 }
