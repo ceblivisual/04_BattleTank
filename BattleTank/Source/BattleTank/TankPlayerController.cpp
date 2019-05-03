@@ -20,15 +20,12 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto ControlledTank = GetControlledTank();
-	if (!ControlledTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController not possessing a tank!"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController possessing: %s!"), *ControlledTank->GetName());
-	}
+	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) {return;}
+	FoundAimingComponent(AimingComponent);
+
+	
+
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
@@ -38,7 +35,7 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 void  ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank())	{return;}
+	if (!ensure(GetControlledTank()))	{return;}
 
 	FVector HitLocation; // Our parameter
 	

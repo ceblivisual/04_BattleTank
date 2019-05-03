@@ -2,3 +2,4 @@
 #define BATTLETANK_API
 #define UPROPERTY(__VA_ARGS__)
 #define BATTLETANK_API#define UFUNCTION(__VA_ARGS__)
+#define UFUNCTION(__VA_ARGS__)

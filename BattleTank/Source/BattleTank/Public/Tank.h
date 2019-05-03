@@ -21,6 +21,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
 
+	virtual void BeginPlay() override;
+
 	void AimAt(FVector HitLocation);
 
 protected:
