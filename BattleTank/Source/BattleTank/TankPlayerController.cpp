@@ -2,13 +2,14 @@
 
 
 #include "TankPlayerController.h"
-#include "Tank.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "BattleTank.h"
+#include "TankAimingComponent.h"
 #include "Runtime/Core/Public/Math/Vector2D.h"
 
 // Forward Decleration
 class ATank;
+class UTankAimingComponent;
 
 void  ATankPlayerController::Tick(float DeltaTime)
 {
@@ -20,33 +21,22 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent)) {return;}
 	FoundAimingComponent(AimingComponent);
-
-	
-
 }
 
-ATank* ATankPlayerController::GetControlledTank() const
+void ATankPlayerController::AimTowardsCrosshair()
 {
-	return Cast<ATank>(GetPawn());
-}
 
-void  ATankPlayerController::AimTowardsCrosshair()
-{
-	if (!ensure(GetControlledTank()))	{return;}
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
 
-	FVector HitLocation; // Our parameter
-	
-	// Return an OUT Parameter, true if hit landscape 
-
-	if (GetSightRayHitLocation(HitLocation))
-	{	
-		GetControlledTank()->AimAt(HitLocation);
+	FVector HitLocation; // Out parameter
+	if (GetSightRayHitLocation(HitLocation)) // Has "side-effect", is going to line trace
+	{
+		AimingComponent->AimAt(HitLocation);
 	}
-	// 
-		// TODO Tell controlled tank to aim at this point
 }
 
 // Get World location if linetrace through crosshair, true if hits landscape

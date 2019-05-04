@@ -6,8 +6,6 @@
 #include "BattleTank.h"
 #include "TankBarrel.h"
 #include "GameFramework/DefaultPawn.h"
-#include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -16,21 +14,11 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = true;
 	auto TankName = GetName();
 	// No need to protect points as added at construction
-	//TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 }
 
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
-}
-
-void ATank::AimAt(FVector HitLocation)
-{
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-	
 }
 
 void ATank::Fire()
