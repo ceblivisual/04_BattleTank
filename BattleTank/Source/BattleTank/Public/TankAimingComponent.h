@@ -39,14 +39,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
 
+	bool IsBarrelMoving();
+
+
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFiringState Firingstate = EFiringState::Aiming;
+	EFiringState Firingstate = EFiringState::Locked;
 
 private:
 	// Sets default values for this component's properties
-	UTankAimingComponent();	
+	UTankAimingComponent();
 
+	virtual void BeginPlay() override;
+
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 	
@@ -60,4 +68,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, category = "Firing")
 	float ReloadTimeInSeconds = 2;
+
+	FVector AimDirection;
 };
+
+

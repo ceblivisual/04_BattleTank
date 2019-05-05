@@ -20,10 +20,12 @@ void ATankAIController::Tick(float DeltaTime)
 	auto ControlledTank = GetPawn();
 	
 	// Aim towards the player
-	if (!ensure(PlayerTank && ControlledTank)) { return; }
-		// Move towards the player
+	if (!ensure(ControlledTank)) { return; }
+	if (!ensure(PlayerTank)) { return; }
+	// Move towards the player
 		MoveToActor(PlayerTank, AcceptenceRadius);
 		auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
 
 		// TODO Fix firing
