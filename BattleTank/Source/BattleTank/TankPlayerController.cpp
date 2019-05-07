@@ -2,7 +2,6 @@
 
 
 #include "TankPlayerController.h"
-#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "BattleTank.h"
 #include "TankAimingComponent.h"
 #include "Runtime/Core/Public/Math/Vector2D.h"
@@ -10,12 +9,6 @@
 // Forward Decleration
 class ATank;
 class UTankAimingComponent;
-
-void  ATankPlayerController::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	AimTowardsCrosshair();
-}
 
 void ATankPlayerController::BeginPlay()
 {
@@ -26,14 +19,22 @@ void ATankPlayerController::BeginPlay()
 	FoundAimingComponent(AimingComponent);
 }
 
+void  ATankPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AimTowardsCrosshair();
+}
+
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	//if (GetPawn()) { return; }
+	if (GetPawn()) { return; } // e.g. if not possessing
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent)) { return; }
 
 	FVector HitLocation; // Out parameter
-	if (GetSightRayHitLocation(HitLocation)) // Has "side-effect", is going to line trace
+	bool bGotHitLocation = GetSightRayHitLocation(HitLocation);
+
+	if (bGotHitLocation) // Has "side-effect", is going to line trace
 	{
 		AimingComponent->AimAt(HitLocation);
 	}
@@ -54,11 +55,9 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& Hitlocation) const
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		// Line-Trace along that look direction, and see what we hit (up to max range)
-		GetLookVectorHitLocation(LookDirection, Hitlocation);
+		return GetLookVectorHitLocation(LookDirection, Hitlocation);
 	}
-
-
-	return true;
+	return false;
 }
 
 bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const
@@ -72,10 +71,12 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 		StartLocation, 
 		EndLocation,	
 		ECollisionChannel::ECC_Visibility)
-		){
+		)
+	{
 		HitLocation = HitResult.Location;
 		return true;
-		}
+	}
+
 	HitLocation = FVector(0);
 	
 	return false; // LineTrace didn't succeed

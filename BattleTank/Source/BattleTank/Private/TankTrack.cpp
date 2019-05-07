@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Cebli Görselleþtirme & Animasyon
 
 #include "TankTrack.h"
 #include "BattleTank.h"
@@ -10,16 +10,16 @@ UTankTrack::UTankTrack()
 
 void UTankTrack::BeginPlay()
 {
-	// Super::BeginPlay();
 	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
 }
 
 void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Onhit There..!"))
-	ApplySidewaysForce();
 	DriveTrack();
+	ApplySidewaysForce();
 	CurrentThrottle = 0;
+	
 }
 
 void UTankTrack::ApplySidewaysForce()
@@ -38,6 +38,7 @@ void UTankTrack::ApplySidewaysForce()
 void UTankTrack::SetThrottle(float Throttle)
 {
 	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1, 1);
+
 }
 
 void UTankTrack::DriveTrack()
@@ -46,4 +47,5 @@ void UTankTrack::DriveTrack()
 	auto ForceLocation = GetComponentLocation();
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+	UE_LOG(LogTemp, Warning, TEXT("UTankTrack::DriveTrack()..!"))
 }
